@@ -1,0 +1,395 @@
+{
+  "datasets": [
+    {
+      "name": "hora",
+      "displayName": "Por hora",
+      "queryLines": [
+        "SELECT hora, con_victimas, pct_muertos FROM workspace.default.oro_hora"
+      ]
+    },
+    {
+      "name": "loc",
+      "displayName": "Por localidad",
+      "queryLines": [
+        "SELECT localidad, con_victimas FROM workspace.default.oro_localidad WHERE localidad != 'SIN INFORMACION'"
+      ]
+    },
+    {
+      "name": "tasa",
+      "displayName": "Tasa por localidad",
+      "queryLines": [
+        "SELECT localidad, tasa_victimas FROM workspace.default.oro_tasa_localidad WHERE localidad != 'SUMAPAZ'"
+      ]
+    },
+    {
+      "name": "cruce",
+      "displayName": "Localidad y franja",
+      "queryLines": [
+        "SELECT localidad, SUBSTRING(franja, 3) AS franja, con_victimas FROM workspace.default.oro_localidad_franja WHERE publicable AND localidad != 'SIN INFORMACION'"
+      ]
+    },
+    {
+      "name": "clase",
+      "displayName": "Por clase",
+      "queryLines": [
+        "SELECT clase, pct_muertos FROM workspace.default.oro_clase WHERE siniestros >= 100"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "priorizacion",
+      "displayName": "Priorización",
+      "layout": [
+        {
+          "widget": {
+            "name": "w_hora",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "hora",
+                  "fields": [
+                    {
+                      "name": "hora",
+                      "expression": "`hora`"
+                    },
+                    {
+                      "name": "con_victimas",
+                      "expression": "`con_victimas`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "hora",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "hora"
+                },
+                "y": {
+                  "fieldName": "con_victimas",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "con_victimas"
+                }
+              },
+              "frame": {
+                "title": "1. Siniestros con víctimas por hora",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "w_grave",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "hora",
+                  "fields": [
+                    {
+                      "name": "hora",
+                      "expression": "`hora`"
+                    },
+                    {
+                      "name": "pct_muertos",
+                      "expression": "`pct_muertos`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "hora",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "hora"
+                },
+                "y": {
+                  "fieldName": "pct_muertos",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "pct_muertos"
+                }
+              },
+              "frame": {
+                "title": "2. % de siniestros con muertos por hora",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "w_loc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "loc",
+                  "fields": [
+                    {
+                      "name": "con_victimas",
+                      "expression": "`con_victimas`"
+                    },
+                    {
+                      "name": "localidad",
+                      "expression": "`localidad`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "con_victimas",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "con_victimas"
+                },
+                "y": {
+                  "fieldName": "localidad",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  },
+                  "displayName": "localidad"
+                }
+              },
+              "frame": {
+                "title": "3. Siniestros con víctimas por localidad",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 3,
+            "height": 9
+          }
+        },
+        {
+          "widget": {
+            "name": "w_tasa",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "tasa",
+                  "fields": [
+                    {
+                      "name": "tasa_victimas",
+                      "expression": "`tasa_victimas`"
+                    },
+                    {
+                      "name": "localidad",
+                      "expression": "`localidad`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tasa_victimas",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "tasa_victimas"
+                },
+                "y": {
+                  "fieldName": "localidad",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  },
+                  "displayName": "localidad"
+                }
+              },
+              "frame": {
+                "title": "4. Con víctimas por 100.000 habitantes al año",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 6,
+            "width": 3,
+            "height": 9
+          }
+        },
+        {
+          "widget": {
+            "name": "w_cruce",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "cruce",
+                  "fields": [
+                    {
+                      "name": "con_victimas",
+                      "expression": "`con_victimas`"
+                    },
+                    {
+                      "name": "localidad",
+                      "expression": "`localidad`"
+                    },
+                    {
+                      "name": "franja",
+                      "expression": "`franja`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "con_victimas",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "con_victimas"
+                },
+                "y": {
+                  "fieldName": "localidad",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  },
+                  "displayName": "localidad"
+                },
+                "color": {
+                  "fieldName": "franja",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "franja"
+                }
+              },
+              "frame": {
+                "title": "5. Con víctimas por localidad y franja",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 3,
+            "height": 9
+          }
+        },
+        {
+          "widget": {
+            "name": "w_clase",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "clase",
+                  "fields": [
+                    {
+                      "name": "pct_muertos",
+                      "expression": "`pct_muertos`"
+                    },
+                    {
+                      "name": "clase",
+                      "expression": "`clase`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "pct_muertos",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "pct_muertos"
+                },
+                "y": {
+                  "fieldName": "clase",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  },
+                  "displayName": "clase"
+                }
+              },
+              "frame": {
+                "title": "6. % de siniestros con muertos por clase",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 15,
+            "width": 3,
+            "height": 9
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ]
+}
