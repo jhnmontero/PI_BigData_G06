@@ -58,3 +58,29 @@ muestra = segura.sample(fraction=min(1.0, 6000 / segura.count()), seed=6).limit(
 muestra.to_csv(f"{RUTA}/muestra_anonimizada.csv", index=False)
 print("Filas de la muestra:", len(muestra))
 print("Descarga la muestra desde Catalog > workspace > default > exportes > muestra_anonimizada.csv")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Control de acceso aplicado
+# MAGIC El espacio de trabajo gratuito no tiene los grupos de la política de `03_seguridad`, así que se aplica con `account users`, el grupo que incluye a todos los usuarios de la cuenta: pueden leer los agregados y la vista, y no las capas con ubicación exacta. El dueño de las tablas conserva su acceso. Cada instrucción informa si funcionó, y `SHOW GRANTS` deja el permiso vigente a la vista.
+
+# COMMAND ----------
+
+GRUPO = "`account users`"
+INSTRUCCIONES = [f"REVOKE ALL PRIVILEGES ON TABLE {ESQUEMA}.{t} FROM {GRUPO}" for t in ("siniestros_bogota", "siniestros_plata", "siniestros_anonima")]
+INSTRUCCIONES += [f"GRANT SELECT ON TABLE {ESQUEMA}.{t} TO {GRUPO}" for t in ("oro_localidad", "oro_localidad_franja", "vw_priorizacion")]
+resultado_acceso = []
+for instruccion in INSTRUCCIONES:
+    try:
+        spark.sql(instruccion)
+        resultado_acceso.append((instruccion, "Aplicada", ""))
+    except Exception as error:
+        resultado_acceso.append((instruccion, "Error", str(error)[:200]))
+display(spark.createDataFrame(resultado_acceso, ["instruccion", "estado", "detalle"]))
+print("ACCESO_APLICADAS=", sum(r[1] == "Aplicada" for r in resultado_acceso), "de", len(resultado_acceso))
+
+# COMMAND ----------
+
+display(spark.sql(f"SHOW GRANTS ON TABLE {ESQUEMA}.siniestros_plata"))
+display(spark.sql(f"SHOW GRANTS ON TABLE {ESQUEMA}.vw_priorizacion"))

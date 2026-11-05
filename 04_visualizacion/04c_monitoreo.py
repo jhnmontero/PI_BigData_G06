@@ -56,6 +56,7 @@ fig, ejes = plt.subplots(1, 4, figsize=(15, 3))
 for ax, (col, titulo) in zip(ejes, [("segundos", "Tiempo (s)"), ("filas", "Filas"), ("pct_nulos_localidad", "% nulos LOCALIDAD"), ("almacenamiento_mib", "Almacenamiento (MiB)")]):
     ax.plot(range(1, len(p) + 1), p[col], color="#2a5db0", marker="o", linewidth=2)
     ax.set_title(titulo, fontsize=10, fontweight="bold")
+    ax.set_xticks(range(1, len(p) + 1))
     ax.set_xlabel("Ejecución")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)

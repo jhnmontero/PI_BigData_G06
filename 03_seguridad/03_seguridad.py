@@ -79,7 +79,7 @@ print("Por eso la capa anónima es de uso interno y a la Secretaría solo salen 
 
 # MAGIC %md
 # MAGIC ## Control de acceso por rol
-# MAGIC Esta es la política definida. No se ejecuta porque el espacio de trabajo gratuito no tiene esos grupos creados; en una entidad real se aplicaría con estas instrucciones de Unity Catalog.
+# MAGIC Esta es la política definida. El espacio de trabajo gratuito no tiene estos tres grupos, así que en una entidad real se aplicaría con las instrucciones de abajo. Lo que sí se puede aplicar aquí, con el grupo `account users`, se ejecuta al final de `04b_integracion`, porque las tablas oro y la vista se crean después de este notebook.
 # MAGIC
 # MAGIC | Rol | Bronce y plata | Anónima | Oro |
 # MAGIC |---|---|---|---|
