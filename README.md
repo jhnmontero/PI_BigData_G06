@@ -41,3 +41,5 @@ Se usó Claude (Anthropic). El detalle está en el anexo del documento APA.
 
 ## Conexión externa
 `04_visualizacion/conexion_externa.py` lee `vw_priorizacion` desde fuera de Databricks, a través de un SQL Warehouse. Se corre en un computador local, con la clave en una variable de entorno. El resultado de la prueba está en `99_evidencias/conexion_externa.txt`.
+
+También se probó con Power BI Desktop: se conecta con el conector Databricks al mismo SQL Warehouse y carga `vw_priorizacion`. Archivo y capturas en el paquete de entrega.
